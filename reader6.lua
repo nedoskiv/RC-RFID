@@ -3,7 +3,7 @@ tmr.alarm(6, 100, tmr.ALARM_AUTO, function() 					-- auto relay switching
 tmr.stop(6)
 
 --- RFID part start
-		if rdr==1 and s.ss2 ~= nil
+		if rdr==1 and s.ss2 < 13
 			then
 				rdr=2
 				pin_ss =s.ss2
@@ -15,7 +15,7 @@ tmr.stop(6)
 				end
 		end
 		local isTagNear, cardType = RC522.request()
-		if isTagNear == true or obtn()==gpio.LOW
+		if isTagNear == true
 			then
 		--		iw(2,1)
 				err, serialNo = RC522.anticoll()
@@ -33,14 +33,8 @@ tmr.stop(6)
 		--		RC522.clear_bitmask(0x08, 0x08)    -- Turn off encryption
 		--		iw(2,0)
 
+				print (dofile("tag4.lc")(appendHex(serialNo)))
 
-				local ui=appendHex(serialNo)
-				
-				-- TAG check routine begin
-
-				-- TAG check routine end
-
---      tmr.start(6)    
 		end
 
 
@@ -48,6 +42,7 @@ tmr.stop(6)
 --- end RFID PART	
 
 tmr.start(6)
+--print ("rdr6 loop")
 end)			-- timer
 
 

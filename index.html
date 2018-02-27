@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Web-server</title>
+	<title><?luareturn(s.nm)?> - RC-RFID</title>
 	<link rel="stylesheet" href="style.css.gz" />
 	<style>
 		.cont-flu {
@@ -20,8 +20,11 @@
 
 <body>
 	<ul class="nav fix" id="myTopnav">
-		<li><a href="#" class="brand">Web-server</a></li>
-		<li><a href="settings.html">Настройки</a></li>
+		<li><a href="#" class="brand">Information</a></li>
+		<li><a href="settings.html">Settings</a></li>
+		<li><a href="rfid.html">RFID list</a></li>
+		<li><a href="Reports.html">Reports</a></li>
+		<li><a href="addrfid.html">add new TAG</a></li>
 		<li style="float:right;margin-right:10px;"><a href="#" onclick="logout()">Выход</a></li>
 		<li style="float:right;margin-right:10px;"><a href="http://codedevice.ru" target="_blank">Code Device</a></li>
 		<li class="-icon"><a href="#" onclick="nav()">☰</a></li>

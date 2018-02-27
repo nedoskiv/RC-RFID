@@ -29,7 +29,18 @@
 <div class="xs-12 sm-6 lg-6"><div class="row center"><div class="xs-10"><div class="group"><input id="mqtt_time" type="text" required="" value="<?lua return(s.mqtt_time)?>"><label for="mqtt_time">Период(сек)</label></div></div>
 </div><div class="row center"><div class="xs-10"><div class="group"><input id="mqtt_server" type="text" required="" value="<?lua return(s.mqtt_server)?>"><label for="mqtt_server">Server</label></div></div></div><div class="row center">
 <div class="xs-10"><div class="group"><input id="mqtt_port" type="text" required="" value="<?lua return(s.mqtt_port)?>">
-<label for="mqtt_port">Port</label></div></div></div></div></div><br><br><div class="row end">
+<label for="mqtt_port">Port</label></div></div></div></div></div>
+
+<div class="row"><div class="xs-12"><h3>RFID :</h3></div></div>
+<div class="row"><div class="xs-12 sm-6 lg-6"><div class="row center"><div class="xs-10"><div class="group">
+
+<label for="ss1">Secondary RFID reader:</label>
+<select id="ss1">
+<option <?lua return(s.ss1==8 and'selected'or'')?> value="8">Enabled</option>
+<option <?lua return(s.ss1==13 and'selected'or'')?> value="13">Disabled</option>
+</select></div></div></div>
+
+<br><br><div class="row end">
 <div class="xs-12"><div class="group"><button class="info" style="margin-right: 2em;" id="btn_save">Save</button>
 </div></div></div><br><div class="row">
 </div></div></div></div>
