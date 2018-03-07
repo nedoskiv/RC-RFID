@@ -1,10 +1,38 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Settings page</title><link href="style.css.gz" rel="stylesheet"><style>.cont-flu{margin-top: 3em;}</style></head><body><ul class="nav fix" id="myTopnav"><li><a href="index.html" class="brand">Web-server</a></li>
-<li><a href="#">Настройки</a></li><li style="float:right;margin-right:10px;"><a href="#" id="btn_exit">Выход</a></li>
-<li style="float:right;margin-right:10px;"><a href="http://codedevice.ru" target="_blank" >Code Device</a></li><li class="-icon"><a href="#" id="btn_nav">☰</a></li></ul><div id="Modal" class="modal">
-<div class="m-cont"><span class="close" id="close_m">&times;</span><div class="m-body"><p>Сохранить настройки и перезагрузить модуль?</p></div><div class="m-foo"><button id="save_m" class="success">Yes</button><button id="close" class="danger">No</button></div></div></div><div class="cont-flu"><div class="row"><div class="xs-12 sm-2 lg-2">
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Настройки</title><link href="style.css.gz" rel="stylesheet"><style>.cont-flu{margin-top: 3em;}</style></head><body>
+	<ul class="nav fix" id="myTopnav">
+		<li><a href="index.html" class="brand">Информация</a></li>
+		<li><a href="settings.html">Настройки</a></li>
+		<li><a href="rfid.html">Управление на RFID</a></li>
+		<li><a href="#" id="btn_restart">Рестарт</a></li>
+		<li style="float:right;margin-right:10px;"><a href="#" id="btn_exit">Изход</a></li>
+		<li style="float:right;margin-right:10px;"><a href="http://r-control.eu" target="_blank">R-Control</a></li>
+		<li class="-icon"><a href="#" onclick="nav()">☰</a></li>
+	</ul>
+<div id="Modal" class="modal">
+<div class="m-cont"><span class="close" id="close_m">&times;</span><div class="m-body"><p>Запис на настройките и рестарт?</p></div><div class="m-foo"><button id="save_m" class="success">Да</button><button id="close_m" class="danger">Не</button></div></div></div>
+	<div id="Restart2" class="modal">
+		<div class="m-cont">
+			<span class="close" id="restart_c">&times;</span>
+			<div class="m-body">
+				<p>Желаете ли рестарт на устройството?</p>
+			</div>
+			<div class="m-foo">
+				<button id="restart_m" class="success">Да</button>
+				<button id="restart_c" class="danger">Не</button>
+			</div>
+		</div>
+	</div>
+	<div id="Restart1" class="modal">
+		<div class="m-cont">
+			<div class="m-body">
+				<h3 style="text-align:center;">Устройството се рестартира, страницатa ще презареди след <span id="countdowntimer">15 </span> секунди</h3>
+			</div>
+		</div>
+	</div>
+<div class="cont-flu"><div class="row"><div class="xs-12 sm-2 lg-2">
 </div><div class="xs-12 sm-10 lg-9"><h1>Settings</h1><div class="row"><div class="xs-12 sm-6 lg-6">
 <h3>Wi-Fi :</h3><div class="row center"><div class="xs-10"><div class="group"><select id="wifi_mode">
-<option <?lua return(s.wifi_mode=="OFF"and'selected'or'')?> value="OFF">Выключить</option><option <?lua return(s.wifi_mode=="ST"and'selected'or'')?> value="ST">Wireless client</option><option <?lua return(s.wifi_mode=="AP"and'selected'or'')?> value="AP">Access point</option>
+<option <?lua return(s.wifi_mode=="OFF"and'selected'or'')?> value="OFF">Изключен</option><option <?lua return(s.wifi_mode=="ST"and'selected'or'')?> value="ST">Wireless client</option><option <?lua return(s.wifi_mode=="AP"and'selected'or'')?> value="AP">Access point</option>
 </select></div></div></div>
 <div class="row center"><div class="xs-10"><div class="group"><select id="wifi_phy">
 <option <?lua return(s.wifi_phy==wifi.PHYMODE_B and'selected'or'')?> value="<?lua return(wifi.PHYMODE_B)?>">802.11b</option>
@@ -13,17 +41,19 @@
 </select></div></div></div>
 <div class="row center"><div class="xs-10"><div class="group"><div class="search">
 <input id="wifi_id" name="wifi_id" type="text" required=" " value="<?lua return(s.wifi_id)?>">
-<label for="wifi_id">Имя (SSID):</label><input id="search" type="submit" value="Поиск"><ul id="list" style="display:none;">
-</ul></div></div></div><div class="xs-10"><div class="group"><input id="wifi_pass" type="password" required="" value="<?lua return(s.wifi_pass)?>"><label for="wifi_pass">Password</label></div></div></div></div><div class="xs-12 sm-6 lg-6">
-<h3>Аутентификация :</h3><div class="row center"><div class="xs-10"><div class="group"><select id="auth">
-<option <?lua return(s.auth=="OFF"and'selected'or'')?> value="OFF">Выключить</option>
-<option <?lua return(s.auth=="ON"and'selected'or'')?> value="ON">Включить</option></select>
+<label for="wifi_id">Име на мрежа (SSID):</label><input id="search" type="submit" value="Списък"><ul id="list" style="display:none;">
+</ul></div></div></div><div class="xs-10"><div class="group"><input id="wifi_pass" type="password" required="" value="<?lua return(s.wifi_pass)?>"><label for="wifi_pass">Парола</label></div></div></div></div>
+<div class="xs-12 sm-6 lg-6">
+<h3>Ауторизация :</h3><div class="row center"><div class="xs-10"><div class="group"><select id="auth">
+<option <?lua return(s.auth=="OFF"and'selected'or'')?> value="OFF">Изключена</option>
+<option <?lua return(s.auth=="ON"and'selected'or'')?> value="ON">Включена</option></select>
 </div></div></div><div class="row center"><div class="xs-10"><div class="group"><input id="auth_login" type="text" required="" value="<?lua return(s.auth_login)?>"><label for="auth_login">Login</label></div></div></div>
-<div class="row center"><div class="xs-10"><div class="group"><input id="auth_pass" type="password" required="" value="<?lua return(s.auth_pass)?>"><label for="auth_pass">Password</label></div></div></div></div></div>
+<div class="row center"><div class="xs-10"><div class="group"><input id="auth_pass" type="password" required="" value="<?lua return(s.auth_pass)?>"><label for="auth_pass">Password</label></div></div></div>
+<div class="row center"><div class="xs-10"><div class="group"><input id="nm" type="text" required="" value="<?lua return(s.nm)?>"><label for="nm">Име на системата</label></div></div></div></div></div>
 <div class="row"><div class="xs-12"><h3>MQTT :</h3></div></div><div class="row"><div class="xs-12 sm-6 lg-6">
 <div class="row center"><div class="xs-10"><div class="group"><select id="mqtt">
-<option <?lua return(s.mqtt=="OFF"and'selected'or'')?> value="OFF">Выключить</option>
-<option <?lua return(s.mqtt=="ON"and'selected'or'')?> value="ON">Включить</option>
+<option <?lua return(s.mqtt=="OFF"and'selected'or'')?> value="OFF">Изключено</option>
+<option disabled <?lua return(s.mqtt=="ON"and'selected'or'')?> value="ON">Включено</option>
 </select></div></div></div><div class="row center"><div class="xs-10"><div class="group"><input id="mqtt_login" type="text" required="" value="<?lua return(s.mqtt_login)?>"><label for="mqtt_login">Login</label></div>
 </div><div class="xs-10"><div class="group"><input id="mqtt_pass" type="password" required="" value="<?lua return(s.mqtt_pass)?>"><label for="mqtt_pass">Password</label></div></div></div></div>
 <div class="xs-12 sm-6 lg-6"><div class="row center"><div class="xs-10"><div class="group"><input id="mqtt_time" type="text" required="" value="<?lua return(s.mqtt_time)?>"><label for="mqtt_time">Период(сек)</label></div></div>
@@ -31,18 +61,89 @@
 <div class="xs-10"><div class="group"><input id="mqtt_port" type="text" required="" value="<?lua return(s.mqtt_port)?>">
 <label for="mqtt_port">Port</label></div></div></div></div></div>
 
-<div class="row"><div class="xs-12"><h3>RFID :</h3></div></div>
-<div class="row"><div class="xs-12 sm-6 lg-6"><div class="row center"><div class="xs-10"><div class="group">
 
-<label for="ss1">Secondary RFID reader:</label>
-<select id="ss1">
-<option <?lua return(s.ss1==8 and'selected'or'')?> value="8">Enabled</option>
-<option <?lua return(s.ss1==13 and'selected'or'')?> value="13">Disabled</option>
-</select></div></div></div>
+<div class="row"><div class="xs-12"><h3>Система за контрол на достъп: :</h3></div></div>
+<div class="row"><div class="xs-12 sm-6 lg-6">
+<div class="row center"><div class="xs-10"><div class="group left">
+<label for="ss1">Първи RFID четец:</label><select id="ss1">
+<option <?lua return(s.ss1==8 and'selected'or'')?> value="8">SDA(SS) --> GPIO 8</option>
+<option <?lua return(s.ss1==0 and'selected'or'')?> value="0">SDA(SS) --> GPIO 0</option>
 
-<br><br><div class="row end">
+</select>
+</div></div></div>
+<div class="row center"><div class="xs-10"><div class="group left">
+<label for="ss2">Втори RFID четец:</label><select id="ss2">
+<option <?lua return(s.ss2==8 and'selected'or'')?> value="8">SDA(SS) --> GPIO 8</option>
+<option <?lua return(s.ss2==0 and'selected'or'')?> value="0">SDA(SS) --> GPIO 0</option>
+<option <?lua return(s.ss2==13 and'selected'or'')?> value="13">Изключен</option>
+</select>
+</div></div></div>
+<div class="row center"><div class="xs-10"><div class="group left">
+<label for="dg">Kомандното реле е свързано на:</label><select id="dg">
+<option <?lua return(s.dg==1 and'selected'or'')?> value="1">GPIO 1</option>
+<option <?lua return(s.dg==2 and'selected'or'')?> value="2">GPIO 2</option>
+<option <?lua return(s.dg==9 and'selected'or'')?> value="9">GPIO 9 (UART RX)</option>
+</select>
+</div></div></div>
+<div class="row center"><div class="xs-10"><div class="group left">
+<label for="dcv">Състояние на релето в<br>режим на изчакване:</label><select id="dcv">
+<option <?lua return(s.dcv==0 and'selected'or'')?> value="0">Нормално</option>
+<option <?lua return(s.dcv==1 and'selected'or'')?> value="1">Превключено</option>
+</select>
+</div></div></div>
+<div class="row center"><div class="xs-10"><div class="group left">
+<label for="dov">Състояние на релето при<br>осигуряване на достъп:</label><select id="dov">
+<option <?lua return(s.dov==0 and'selected'or'')?> value="0">Нормално</option>
+<option <?lua return(s.dov==1 and'selected'or'')?> value="1">Превключено</option>
+</select>
+</div></div></div></div>
+<div class="xs-12 sm-6 lg-6">
+<div class="row center"><div class="xs-10"><div class="group left">
+<label for="odt">Период на задeйстване на релето (в секунди):</label>
+<input id="odt" type="number" min="1" max="60" value="<?lua return(s.odt)?>">
+</div></div></div>
+<div class="row center"><div class="xs-10"><div class="group left">
+<label for="ob">Бутон за осигуряване на достъп:</label><select id="ob">
+<option <?lua return(s.ob==13 and'selected'or'')?> value="13">Изключен</option>
+<option <?lua return(s.ob==1 and'selected'or'')?> value="1">GPIO 1</option>
+<option <?lua return(s.ob==2 and'selected'or'')?> value="2">GPIO 2</option>
+<option <?lua return(s.ob==9 and'selected'or'')?> value="9">GPIO 9 (UART RX)</option>
+<option <?lua return(s.ob==10 and'selected'or'')?> value="10">GPIO 10 (UART TX)</option>
+</select>
+</div></div></div>
+<div class="row center"><div class="xs-10"><div class="group left">
+<label for="bg">Звуков индикатор:</label><select id="bg">
+<option <?lua return(s.bg==1 and'selected'or'')?> value="1">GPIO 1</option>
+<option <?lua return(s.bg==2 and'selected'or'')?> value="2">GPIO 2</option>
+<option <?lua return(s.bg==9 and'selected'or'')?> value="9">GPIO 9 (UART RX)</option>
+<option <?lua return(s.bg==13 and'selected'or'')?> value="13">Изключен</option>
+</select>
+</div></div></div>
+<div class="row center"><div class="xs-10"><div class="group left">
+<label for="cnt">Индивидуални броячи / обучаващ режим:</label><select id="cnt">
+<option <?lua return(s.cnt==1 and'selected'or'')?> value="1">Включени/Изключен</option>
+<option <?lua return(s.cnt==0 and'selected'or'')?> value="0">Изключени/Изключен</option>
+<option <?lua return(s.cnt==3 and'selected'or'')?> value="3">Изключени/Включен</option>
+<option <?lua return(s.cnt==2 and'selected'or'')?> value="2">Включени/Включен</option>
+</select>
+</div></div></div>
+<div class="row center"><div class="xs-10"><div class="group left">
+<label for="mu">Лимит на новорегистрираните тагове:</label>
+<input id="mu" type="number" min="1" max="100000" value="<?lua return(s.mu)?>">
+</div></div></div>
+<div class="row center"><div class="xs-10"><div class="group left">
+<label for="wa">Ауторизация през WEB интерфейса:</label><select id="wa">
+<option <?lua return(s.wa==1 and'selected'or'')?> value="1">Включена</option>
+<option <?lua return(s.wa==2 and'selected'or'')?> value="2">Изключена</option>
+</select>
+<input id="md" type="hidden"  value="<?lua return(s.md==1 and'5'or s.md)?>">
+</div></div></div>
+</div></div>
+
+
+<br><br><div class="row"><div class="xs-12 sm-6 lg-6">&nbsp;</div><div class="row end">
 <div class="xs-12"><div class="group"><button class="info" style="margin-right: 2em;" id="btn_save">Save</button>
 </div></div></div><br><div class="row">
-</div></div></div></div>
+</div></div></div>
 
 <script src="script_settings.js.gz"></script></body></html>

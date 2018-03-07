@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>RC-RFID <?luareturn(s.nm)?></title>
+	<link href="style.css.gz" rel="stylesheet">
+	<style>	
+		.cont-flu {
+			margin-top: 3em;
+		}
+
+		a {
+			text-decoration: none;
+			color: deeppink;
+		}
+	</style>
+</head>
+
+<body><input id="md" type="hidden"  value="<?lua return(s.md==1 and'5'or s.md)?>">
+	<ul class="nav fix" id="myTopnav">
+		<li><a id="distag" href="index.html" class="brand">Информация</a></li>
+		<li><a id="distag" href="settings.html">Настройки</a></li>
+		<li><a id="distag" href="rfid.html">Управление на RFID</a></li>
+		<li><a href="#" id="btn_restart">Рестарт</a></li>
+		<li style="float:right;margin-right:10px;"><a href="#" id="btn_exit">Изход</a></li>
+		<li style="float:right;margin-right:10px;"><a href="http://r-control.eu" target="_blank">R-Control</a></li>
+		<li class="-icon"><a href="#" onclick="nav()">☰</a></li>
+	</ul>
+	<div id="Restart2" class="modal">
+		<div class="m-cont">
+			<span class="close" id="restart_c">&times;</span>
+			<div class="m-body">
+				<p>Желаете ли рестарт на устройството?</p>
+			</div>
+			<div class="m-foo">
+				<button id="restart_m" class="success">Да</button>
+				<button id="restart_c" class="danger">Не</button>
+			</div>
+		</div>
+	</div>
+	<div id="Deleted" class="modal danger">
+		<div class="m-cont">
+			<span class="close" id="deleted_close">&times;</span>
+			<div class="m-body">
+				<p>Желаете ли рестарт на устройството?</p>
+			</div>
+			<div class="m-foo">
+				<button id="deleted_close" class="success">ЗАТВОРИ</button>
+			</div>
+		</div>
+	</div>
+	<div id="Deleteerror" class="modal danger">
+		<div class="m-cont">
+			<span class="close" id="deleted_close">&times;</span>
+			<div class="m-body">
+				<p>Желаете ли рестарт на устройството?</p>
+			</div>
+			<div class="m-foo">
+				<button id="deleted_close" class="purple">ЗАТВОРИ</button>
+			</div>
+		</div>
+	</div>
+	<div id="Delete1" class="modal">
+		<div class="m-cont">
+			<span class="close" id="delete1_c">&times;</span>
+			<div class="m-body">
+				<h2 class='center'>Потвърдете изтриването на RFID<br><span id="delete1title">... </span></h2>
+			</div>
+			<div class="m-foo">
+				<button id="delete1_m" class="success">Да</button>
+				<button id="delete1_c" class="danger">Не</button>
+			</div>
+		</div>
+	</div>
+	<div id="Restart1" class="modal">
+		<div class="m-cont">
+			<div class="m-body">
+				<h3 style="text-align:center;">Устройството се рестартира, страницатa ще презареди след <span id="countdowntimer">15 </span> секунди</h3>
+			</div>
+		</div>
+	</div>
+	<div id="Tag1" class="modal">
+		<div class="m-cont">
+			<span class="close" id="tag_c">&times;</span>
+			<div class="m-body">
+					<h2 class="center" id="taglabel">.</h2>
+					<label for="tag">RFID</label>
+					<input id="tag" type="text" required=""  readonly>
+					<br>
+					<label for="n">ИМЕ</label>
+					<input id="n" type="text" required="">
+					<br>
+					<label for="e">Активен</label><select id="e">
+					<option value="1">ДА</option>
+					<option value="2">НЕ</option>
+					</select>
+					<br>
+					<label for="u">Използван до момента:</label>
+					<input id="u" type="number" readonly>
+					<br>
+					<label for="mu">Лимит:</label>
+					<input id="mu" type="number" min="1" max="100000">
+			</div>
+			<div class="m-foo">
+				<button id="tag_clear" class="purple">НУЛИРАНЕ на брояча</button>
+				<button id="tag_delete" class="danger">ИЗТРИВАНЕ</button>
+				<button id="tag_save" class="success">ЗАПИС</button>
+			</div>
+		</div>
+	</div>
+	<div class="cont-flu">
+		<div class="row">
+			<div class="xs-12 sm-2 lg-2" style="min-width: 150px;">
+				<h3>RFID</h3>
+				<ul>
+					<li><a href="">Добавяне/Редактиране</a></li>
+					<li><a id="distag" href="rfidlist.html">Пълен списък</a></li>
+					<li><a id="distag" href="rfidgenerate" >Генериране на списък</a></li>
+				</ul>
+			</div>
+			<div class="xs-12 sm-10 lg-9 ">
+				<div class="row">
+					<div class="xs-12">
+					<h3 style="text-align:center;"><span id="waitfortag">+----</span><br><span id="waitfortag1">Зареждане ...</span></h3>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+				
+				</div>
+			</div>
+		</div>
+	</div>
+<script>
+window.onload = function () {
+	var restart2 = document.getElementById('Restart2');
+	var restart1 = document.getElementById('Restart1');
+	var delete1 = document.getElementById('Delete1');
+	var deleteerror = document.getElementById('Deleteerror');
+	var deleted = document.getElementById('Deleted');
+	var tag1 = document.getElementById('Tag1');
+	var tagen = 1;
+	var int;
+	function send(page, data, callback) {
+		var req = new XMLHttpRequest();
+		req.open("POST", page, true);
+		req.setRequestHeader('Content-Type', 'application/json');
+		req.addEventListener("load", function () {
+			if (req.status < 400) {
+				callback(req.responseText);
+			} else {
+				callback(req.status);
+			}
+		});
+		req.send(JSON.stringify(data));
+	}
+		function nav() {
+			var x = document.getElementById("myTopnav");
+			if (x.classList.contains("res")) {
+				x.classList.remove('res');
+			} else {
+				x.classList.add('res');
+			}
+		}
+	function id(val) {
+		return document.getElementById(val).value
+	}
+	function check_sel(val) {
+		var s = document.getElementById(val);
+		for (var i = 0; i < s.options.length; i++) {
+			if (s.options[i].selected) {
+				return s.options[i].value
+			}
+		}
+	}
+	
+	
+	function deletetag() {
+		var data = {init: "delete"};
+		data.tag = document.getElementById("tag").value;
+		send("web_tag.lc", data, function (res) {
+			if (res = "true")
+				{
+				delete1.style.opacity = "0";
+				delete1.style.display = "none";	
+				deleted.style.opacity = "1";
+				deleted.style.display = "block";
+				}
+			else
+				{
+				delete1.style.opacity = "0";
+				delete1.style.display = "none";	
+				deleteerror.style.opacity = "1";
+				deleteerror.style.display = "block";
+				}
+				
+		})
+	}
+
+	function logout() {
+		document.cookie = "id=";
+		location.href = '/login.html';
+	}
+	
+		var x = ["+----", "-+---", "--+--", "---+-", "----+", "---+-", "--+--", "-+---"];
+		var y = 0;
+		function tag() {
+			if (tagen == 1)
+			{
+				var data = {};
+				var tg = {};
+				data.init = "tag";
+				send("web_is_tag.lc", data, function(res) {
+				if (y > 7)
+					{
+						y = 0
+					}	
+				document.getElementById('waitfortag').innerHTML = x[y];
+				y = y + 1
+					if (res == "none") {
+						tg={};
+					} else {
+						tg = JSON.parse(res);
+						tag1.style.opacity = "1";
+						tag1.style.display = "block";
+						tagen = 2;
+						document.getElementById("u").value = tg.u;
+						document.getElementById("mu").value = tg.mu;
+						document.getElementById("tag").value = tg.tag;
+						document.getElementById("n").value = tg.n;
+						document.getElementById("e").value = tg.e;
+						if (tg.exists == "1")
+							{
+							document.getElementById("taglabel").innerHTML="РЕДАКТИРАНЕ";
+							document.getElementById("taglabel").style.color = "#7ed321";
+							document.getElementById("tag_clear").style.display = "initial";
+							document.getElementById("tag_delete").style.display = "initial";
+							}
+						else
+							{
+							document.getElementById("taglabel").innerHTML="ДОБАВЯНЕ";
+							document.getElementById("taglabel").style.color = "#800080";
+							document.getElementById("tag_clear").style.display = "none";
+							document.getElementById("tag_delete").style.display = "none";
+							}
+					}
+				})
+			}
+	}
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	var timeleftt = document.getElementById('waitfortag');
+	var downloadTimert = setInterval(function(){
+	tag();
+    if (parseInt(timeleftt.innerHTML)<0) 
+		{
+        clearInterval(downloadTimert);
+		}
+	},2000);
+	
+	function reboot() {
+		var data = {init: "reboot"};
+		var stop=false
+		var arr = ["md"];
+		arr.forEach(function (item, i, arr) {
+						data[item] = id(item)
+		});
+		if (stop){ restart2.style.display = "none"; return}
+		restart2.style.opacity = "0";
+		setTimeout(function () {
+			restart2.style.display = "none";
+		}, 600);
+		send("web_control.lc", data, function (res) {
+			if (res = "true") {
+				send("web_control.lc", {
+					init: "reboot"
+				}, function (res) {
+				    var timeleft = 15;
+					var downloadTimer = setInterval(function(){
+					timeleft--;
+					document.getElementById("countdowntimer").textContent = timeleft;
+					if(timeleft <= 0){
+						clearInterval(downloadTimer);
+						location.href = "/";}
+					},1000);
+				});
+			}
+		})
+	}
+	document.body.addEventListener("click", function (event) {
+		var a = document.getElementById('list');
+		//alert(event.target.id)
+		if (event.target.id == "btn_nav") {
+			nav();
+		} else if (event.target.id == "btn_exit") {
+			tagen=2;
+			tg={};
+			logout();
+		} else if (event.target.id == "tag_delete") {
+			document.getElementById("delete1title").innerHTML = document.getElementById("tag").value + " - " + document.getElementById("n").value;
+			tagen=2;
+			tag1.style.opacity = "0";
+			tag1.style.display = "none";
+			delete1.style.opacity = "1";
+			delete1.style.display = "block";
+		} else if (event.target.id == "tag_delete") {
+			tagen=2;
+			deletetag();
+		} else if (event.target.id == "deleted_close") {
+			tagen=1;
+			tag1.style.opacity = "0";
+			tag1.style.display = "none";
+			delete1.style.opacity = "0";
+			delete1.style.display = "none";	
+		} else if (event.target.id == "delete1_c") {
+			tag1.style.opacity = "1";
+			tag1.style.display = "block";
+			delete1.style.opacity = "0";
+			delete1.style.display = "none";
+		} else if (event.target.id == "distag") {
+			tagen=2;
+			tg={};
+		} else if (event.target.id == "btn_restart") {
+			tagen=2;
+			restart2.style.opacity = "1";
+			restart2.style.display = "block";
+		} else if (event.target.id == "restart_c") {
+			restart2.style.opacity = "0";
+			setTimeout(function () {
+				restart2.style.display = "none";
+			}, 600);
+			tagen=1;
+		} else if (event.target.id == "tag_c") {
+			tag1.style.opacity = "0";
+			setTimeout(function () {
+				tag1.style.display = "none";
+			}, 600);
+			tagen=1;
+		} else if (event.target.id == "restart_m") {
+			restart2.style.opacity = "0";
+			restart2.style.display = "none";
+			restart1.style.opacity = "1";
+			restart1.style.display = "block";
+			reboot()
+		}  else {
+			a.style.display = 'none';
+		}
+	});
+	document.getElementById('waitfortag1').innerHTML = "Сканирайте таг за да го добавите или редактирате";
+};
+</script>
+</body>
+
+</html>

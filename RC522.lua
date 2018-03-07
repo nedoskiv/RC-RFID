@@ -437,7 +437,7 @@ if bit.bnot(bit.band(current, 0x03))
 	then
 		RC522.set_bitmask(reg_tx_control, 0x03)
 end
-print("RC522 Firmware Version: 0x"..string.format("%X", RC522.getFirmwareVersion()))
+print("[ INFO ] RC522 Firmware Version: 0x"..string.format("%X", RC522.getFirmwareVersion()))
 
 if s.ss2 < 13
 	then
@@ -459,7 +459,7 @@ if s.ss2 < 13
 			then
 				RC522.set_bitmask(reg_tx_control, 0x03)
 		end
-		print("RC522 Firmware Version: 0x"..string.format("%X", RC522.getFirmwareVersion()))
+		print("[ INFO ] RC522 Firmware Version: 0x"..string.format("%X", RC522.getFirmwareVersion()))
 end
 
 

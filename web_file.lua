@@ -2,7 +2,7 @@ local extmap={
   txt="text/plain",
   js="application/javascript",
   ico="image/x-icon",
-  lua="text/html",
+  lc="text/html",
   css="text/css",
   html="text/html",
   jpeg = "image/jpeg",
@@ -26,10 +26,19 @@ return function(conn,filename,args,cookie)
  local ftype=filename:gsub(".gz",""):match("%.([%a%d]+)$")
  if s.auth=="ON"then
  if not cookie or cookie.id~=tostring((string.byte(s.auth_pass))*s.token) then
-  if ftype=="html"then filename="login.html"end
+--  if ftype=="html"then filename="login.html"end
+if ftype=="lc"
+	then
+		filename="web_login.lc"
+	elseif ftype=="html"
+		then
+			filename="login.html"
+end
+
  end
  end
  local fd=file.open(filename,"r")
+ print ("[ WEB_FILE ] "..filename)
  if fd then
   conn:send(header("200 OK",extmap[ftype or "txt"],gzip))
  else
@@ -55,7 +64,7 @@ return function(conn,filename,args,cookie)
    end
   until not line
   fd:close() fd=nil arg=nil
-  elseif ftype=="lua"then
+  elseif ftype=="lc"then
   local k, c = pcall(dofile(filename),args)
   conn:send(type(c)=="string"and c or"error")
   else

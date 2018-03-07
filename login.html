@@ -3,8 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>Login StepLight</title>
-	<link href="style.css.gz" rel="stylesheet">
+	<title>RC-RFID <?lua return(s.nm)?></title>
 	<style>
 		label {
 			color: black;
@@ -32,20 +31,20 @@
 			border-radius: 10px;
 		}
 	</style>
+	<link href="style.css.gz" rel="stylesheet">
 </head>
 
 <body>
 	<div id="alert" class="alert danger" style="display: none;">
-		<span class="close" onclick="this.parentElement.style.display='none';">&times;</span>
-		<strong>Внимание!</strong> Не верные логин или пароль.
+		<span class="close" onclick="this.parentElement.style.display='none';">&times;</span>Отказан достъп!
 	</div>
 	<div class="cont center purple">
-		<h1>Login</h1>
+		<h1><?lua return(s.nm)?></h1>Системата изисква ауторизация.
 		<div class="row">
 			<div class="xs-12">
 				<div class="group">
 					<input type="text" id="login" name="login" required=" " value="">
-					<label for="login">LOGIN</label>
+					<label for="login">Потребителско име</label>
 				</div>
 			</div>
 		</div>
@@ -53,19 +52,19 @@
 			<div class="xs-12">
 				<div class="group">
 					<input type="password" name="pass" id="pass" required=" " value="">
-					<label for="pass">PASSWORD</label>
+					<label for="pass">Парола</label>
 				</div>
 			</div>
 		</div>
 		<div class="row start">
 			<div class="xs-12 ">
-				<smal style="font-size:0.8em">default login "admin" password "0000"</smal>
+				<span style="font-size:80%">Първоначалните стойности са "admin" с парола "adm1n"</span>
 			</div>
 		</div>
 		<div class="row end">
 			<div class="xs-6">
 				<div class="group">
-					<button class="info" onclick="login()" id="myBtn">LOGIN</button>
+					<button class="info" onclick="login()" id="myBtn">Вход</button>
 				</div>
 			</div>
 		</div>
@@ -96,7 +95,7 @@
 			data.init = "auth";
 			data.login = name("login");
 			data.pass = name("pass");
-			send("web_control.lua", data, function(res) {
+			send("web_control.lc", data, function(res) {
 				if (res == "false") {
 					document.getElementById('alert').style.display = "inline";
 				} else {

@@ -34,6 +34,7 @@ end
 local function parseUri(uri)
  local r={}
  if uri==nil then return r end
+ print ("[ WEB_REQUEST ] "..uri)
  if uri=="/" then uri="/index.html"end
  r.file=uri:match("?")and uri:match("/(.*)%?")or uri:match("/(.*)")
  r.args=parse(uri:match("%?([^=]+=[^;]*)"),"([^&]+)") or {}

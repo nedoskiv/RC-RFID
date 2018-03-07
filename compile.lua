@@ -14,6 +14,13 @@ end
 local serverFiles = {
 
    'obtn4.lua',
+   'web5.lua',
+   'web_tag.lua',
+   'web_login.lua',
+   'web_is_tag.lua',
+   'web_control.lua',
+   'web_file.lua',
+   'web_request.lua',
    'RC522.lua',
    'functions.lua',
    'tag4.lua',

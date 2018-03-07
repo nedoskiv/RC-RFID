@@ -1,6 +1,6 @@
 lt="none"		--	last read tag, gonna be used in web interface						
 rdr=1						--	value which RC522 is readed currently
-rg=3				-- reset GPIO will be configured as input_pullup after system GPIO initialization to make idiotproof setup
+rg=3				-- reset GPIO not configurable, 3 is best choice
 
 function frj (filetemp)
 	if file.open(filetemp, "r")
@@ -22,7 +22,7 @@ function fwoj(f,s)	-- file_write_override_json
     file.write(json)
     file.close()
    end
-   print(json)
+   print("[ DEBUG ] "..json)
    return "true"
  else
   return "false"
@@ -37,8 +37,7 @@ if file.open("setting.json", "r") and gpio.read(rg)==1
 		s = ok and json or {}
 		file.close()
 	else
-		print ("Load defaults")		-- Attention, to preserve memory, GPIO pins not gonna be available for configuration thru web interface
-									-- and are hardcoded into settings.html, if you edit here, need to edit there as well.
+		print ("[ FUNCTIONS ] Default config loaded!")									
 		s={		
 		md=1,				-- mode, 1 normal, 2 regenerate taglist.html, 3 regenerate usagelist.html, 4 remove all tags, 5 normal mode but keep s.token
 		ss1=0,				-- RC522 SDA(SS) pin	(avalable GPIO are: 0,8,1,2,9,10 last two are uart pins)
@@ -49,8 +48,10 @@ if file.open("setting.json", "r") and gpio.read(rg)==1
 		dcv=gpio.LOW,		--	door close value
 		ob=3,				--	open button GPIO ( >12 disabled
 		odt=5,				--	open door time (in seconds)
-		cnt=1, 				--	tag usage count (1 enabled, other disabled)
-		wopn=1,				--	open door by entering tag password via wifi (1 enabled, other disabled)
+		cnt=1, 				--	tag usage count (1 enabled, 0 - disabled, 2 learning mode with counting, 3 learning mode without counting)
+							--	in learning mode, device create record for every unknown tag (grand access too)
+		mu=100,				--	Usage limit for learning mode registered TAGs, not interface configurable yet
+		wa=1,				--	grant access thru password entered in web interface via wifi (1 enabled, other disabled)
 --		wifi_id = "RC8",
 		wifi_id = "r-control.eu",
 		wifi_pass = "88888888",
@@ -65,7 +66,7 @@ if file.open("setting.json", "r") and gpio.read(rg)==1
 		mqtt_time = "",
 		auth="ON",
 		auth_login="admin",
-		auth_pass="0000"
+		auth_pass="adm1n"
 		}
 end
 gpio.mode(s.dg,gpio.OUTPUT)
