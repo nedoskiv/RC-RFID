@@ -29,3 +29,27 @@ This web server gonna be used for basic frontend interface:
 # Possible problems:
 
 * Out of memory :)
+
+# Done so far:
+
+* Fixed various web server memory leaks
+* Backend (for reading/updating/editing/grant access to tags)
+* Buzzer support
+* Dual RFID readers support
+* Grant access by button
+* Learning mode (automated records creation for new tags)
+* Counting of tag usage, limits, deny access if go above limit
+* FrontEND - settings, add/edit/delete tag
+
+# TODO:
+
+* Add tag list creation in separate boot mode
+
+# Short installation instructions:
+
+use nodemcu with following support :
+adc,bit,file,gpio,net,node,sjson,spi,tmr,uart,wifi
+
+Download all files, edit functions.lua (wireless settings)
+run compile.lua and reboot
+Use google chrome to translate it in your language.
