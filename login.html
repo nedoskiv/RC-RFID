@@ -34,7 +34,7 @@
 	<link href="style.css.gz" rel="stylesheet">
 </head>
 
-<body>
+<body><form action="javascript:login();">
 	<div id="alert" class="alert danger" style="display: none;">
 		<span class="close" onclick="this.parentElement.style.display='none';">&times;</span>Отказан достъп!
 	</div>
@@ -64,7 +64,7 @@
 		<div class="row end">
 			<div class="xs-6">
 				<div class="group">
-					<button class="info" onclick="login()" id="myBtn">Вход</button>
+					<button class="info" type="submit" value="Submit" onclick="login()" id="myBtn">Вход</button>
 				</div>
 			</div>
 		</div>
@@ -105,6 +105,7 @@
 			})
 		}
 	</script>
+</form>
 </body>
 
 </html>

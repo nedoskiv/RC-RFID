@@ -26,12 +26,12 @@ return function(ui)
 										--										--		
 				if u ~= false
 					then
-						if u.e ==1		-- TAG is enabled
+						if tonumber(u.e) ==1		-- TAG is enabled
 							then
-								if (s.cnt == 1 or s.cnt==2) and u.u >= u.mu	
+								if (s.cnt == 1 or s.cnt==2) and tonumber(u.u) >= tonumber(u.mu)	
 									then	-- counter system active and limit was exceeded, deny access
 										deny()
-										return ("[ TAG4 ] Limit exceed for TAG "..u.n)
+										return ("[ TAG4 ] Limit exceed for TAG "..ui.." " ..u.n)
 									else	--  Counting system inactive or tag is in limits, grand access
 										opn()
 										buzz(1)
@@ -41,9 +41,9 @@ return function(ui)
 											then
 												u.u=u.u+1
 												fwoj ("T_"..ui,u)
-												print ("[ TAG4 ] Counter increase to "..u.u.." for TAG "..u.n)
+												print ("[ TAG4 ] Counter increase to "..u.u.." for TAG "..ui.." " ..u.n)
 										end
-										return ("[ TAG4 ] Access allowed for TAG "..u.n)
+										return ("[ TAG4 ] Access allowed for TAG "..ui.." " ..u.n)
 								end
 							
 							else	-- TAG disabled, deny access

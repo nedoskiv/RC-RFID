@@ -65,13 +65,15 @@
 								<tr>
 									<th>ChipID</th>
 									<th>FlashID</th>
-									<th>FS Total</th>
-									<th>FS Used</th>
+									<th>MAC адрес
+									<th>FS общо</th>
+									<th>FS използвана</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr><td><?luareturn(string.format("%x",node.chipid()*256))?></td>
           <td><?luareturn(string.format("%x",node.flashid()*256))?></td>
+		  <td><?lua local x=string.upper(wifi.sta.getmac()) return(x)?></td>
           <td><?lua local x=file.fsinfo() return(x)?></td>
 									<td><?lua local _, x=file.fsinfo() return(x)?></td></tr>
 							</tbody>

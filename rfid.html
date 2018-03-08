@@ -55,9 +55,7 @@
 		<div class="m-cont">
 			<span class="close" id="saved_close">&times;</span>
 			<div class="m-body">
-				<h2>Записът е успешен.</h2><br>
-				<h3>Желателно е да генерирате списък наново.</h3>
-				
+				<h2>Записът е успешен.<br>Желателно е да генерирате списъкът с таговете наново след като приключите с редактирането им.</h2>
 			</div>
 			<div class="m-foo">
 				<button id="saved_close" class="success">ЗАТВОРИ</button>
@@ -260,13 +258,7 @@ window.onload = function () {
 				{
 				document.getElementById('waitfortag1').innerHTML = "Обработване, моля изчакайте.";
 				}
-	}
-	
-	
-	
-		
-	
-	
+	}	
 	function deletetag() {
 		var data = {init: "delete"};
 		data.tag = document.getElementById("tag").value;
@@ -308,7 +300,6 @@ window.onload = function () {
 			data.n=document.getElementById("n").value;
 			data.e=document.getElementById("e").value;		
 		send("web_tag.lc", data, function (res) {
-		document.getElementById('waitfortag').innerHTML = res;
 			if (res == "true")
 				{
 					tag1.style.opacity = "0";
