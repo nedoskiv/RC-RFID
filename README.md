@@ -64,3 +64,33 @@ default wireless password is "88888888"
 # Limitations:
 
 * Due to nodemcu file.list function, scripts are capable of generate tag lists/export json file for around 200-250 tags. Increasing it cause out of memory error that cannot be avoided unless someone rewrite nodemcu file module. However system still work, add/edit/delete tags but cannot generate list.
+
+
+### Pin Layout
+
+Primary MFRC522 reader:
+
+| Signal        | MFRC522       | WeMos D1 mini  | NodeMcu | Generic      |
+|---------------|:-------------:|:--------------:| :------:|:------------:|
+| RST/Reset     | RST           | NONE           | NONE    | NONE         |
+| SPI SS        | SDA [3]       | D8 [2]         | D8 [2]  | GPIO-15 [2]  |
+| SPI MOSI      | MOSI          | D7             | D7      | GPIO-13      |
+| SPI MISO      | MISO          | D6             | D6      | GPIO-12      |
+| SPI SCK       | SCK           | D5             | D5      | GPIO-14      |
+| SPI IRQ       | NONE          | NONE           | NONE    | GPIO-14      |
+
+Secondary RFID reader:
+
+| Signal        | MFRC522       | WeMos D1 mini  | NodeMcu | Generic      |
+|---------------|:-------------:|:--------------:| :------:|:------------:|
+| RST/Reset     | RST           | NONE           | NONE    | NONE         |
+| SPI SS        | SDA [3]       | D0             | D0      | GPIO-16      |
+| SPI MOSI      | MOSI          | D7             | D7      | GPIO-13      |
+| SPI MISO      | MISO          | D6             | D6      | GPIO-12      |
+| SPI SCK       | SCK           | D5             | D5      | GPIO-14      |
+| SPI IRQ       | NONE          | NONE           | NONE    | GPIO-14      |
+
+reset button on GPIO 0
+Grant access button on GPIO 1,2,9,10
+buzzer: GPIO 1,2,9
+Relay: 1,2,9
