@@ -1,6 +1,0 @@
-			gpio.write(s.dg,s.dov)
-			print ("[ OBTN4 ] Relay switched by BUTTON")
-			tmr.alarm(4, s.odt*1000, tmr.ALARM_SINGLE, function()
-				gpio.write(s.dg,s.dcv)
-				print ("[ OBTN4 ] Relay to normal after BUTTON usage")
-				end )
