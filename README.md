@@ -40,16 +40,27 @@ This web server gonna be used for basic frontend interface:
 * Learning mode (automated records creation for new tags)
 * Counting of tag usage, limits, deny access if go above limit
 * FrontEND - settings, add/edit/delete tag
+* Added tag list creation is separate boot mode
+* Added export tag (JSON format) in separate boot mode
 
 # TODO:
 
-* Add tag list creation in separate boot mode
+* testing.
+* possible wireless CFG problem, investigate
 
 # Short installation instructions:
 
 use nodemcu with following support :
 adc,bit,file,gpio,net,node,sjson,spi,tmr,uart,wifi
 
-Download all files, edit functions.lua (wireless settings)
-run compile.lua and reboot
+Download all files, upload them to ESP, start compile.lua and reboot
 Use google chrome to translate it in your language.
+default wireless password is "88888888"
+
+# Known issues:
+
+* When switch from wireless client to AP mode, do not initialize with proper SSID/PASSWORD
+
+# Limitations:
+
+* Due to nodemcu file.list function, scripts are capable of generate tag lists/export json file for around 200-250 tags. Increasing it cause out of memory error that cannot be avoided unless someone rewrite nodemcu file module. However system still work, add/edit/delete tags but cannot generate list.
