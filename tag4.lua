@@ -26,6 +26,11 @@ return function(ui)
 										--										--		
 				if u ~= false
 					then
+						if u.u == nil  or u.mu == nil or u.e== nil or u.n == nil	-- failsafe if read zero file
+							then
+								print ("[ TAG4 ] Invalid data:" ..ui.." - "..rdr)
+								u={u=0, mu=100, e=0,n="ERROR"}
+						end						
 						if tonumber(u.e) ==1		-- TAG is enabled
 							then
 								if (s.cnt == 1 or s.cnt==2) and tonumber(u.u) >= tonumber(u.mu)	

@@ -1,11 +1,43 @@
 dofile("functions.lc")
 s.wifi_pass=tostring(s.wifi_pass)
 ----- different mode checkup should be placed here
+s.md=tonumber(s.md)
+print ("[ INIT1 ] System start in MODE "..tostring(s.md))
 if s.md == 5				--	mode 5, keep auth_token for next sessios (keep user signed in after reboot)
 	then
 		s.md=1
 		fwoj("setting.json",s)
-		print ("[ INIT1 ] System start in MODE 5")
+	elseif s.md==2				--	mode 2, regenerate tag list file
+		then
+			s.md=1
+			fwoj("setting.json",s)
+			tmr.create():alarm(200000, tmr.ALARM_SINGLE, function()print("[ INFO ] Rebooting")node.restart()end)			-- failsafe timer to reboot after 3 min and 20 sec
+			dofile ("gen_list.lc")
+			node.restart()
+	elseif s.md==3				-- mode 3 regenerate tag list file and clear counters
+		then
+			s.md=1
+			fwoj("setting.json",s)
+			tmr.create():alarm(200000, tmr.ALARM_SINGLE, function()print("[ INFO ] Rebooting")node.restart()end)			-- failsafe timer to reboot after 3 min and 20 sec
+			dofile ("gen_list_c.lc")
+			node.restart()
+	elseif s.md==4				--	mode 4 generate export tag file 
+		then
+			s.md=1
+			fwoj("setting.json",s)
+			tmr.create():alarm(200000, tmr.ALARM_SINGLE, function()print("[ INFO ] Rebooting")node.restart()end)			-- failsafe timer to reboot after 3 min and 20 sec
+			dofile ("gen_export.lc")
+			node.restart()
+	elseif s.md==6				--	mode 6 clear all counters 
+		then
+			print ("a")
+	elseif s.md==7				--	delete all tags and lists 
+		then
+			s.md=1
+			fwoj("setting.json",s)
+			tmr.create():alarm(200000, tmr.ALARM_SINGLE, function()print("[ INFO ] Rebooting")node.restart()end)			-- failsafe timer to reboot after 3 min and 20 sec
+			dofile ("deletetags.lc")
+			node.restart()
 end
 
 --wifi init

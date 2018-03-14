@@ -8,6 +8,11 @@ return function (tab)
 			if file.exists("T_"..lt)
 				then
 					u = frj ("T_"..lt)
+					if u.u == nil  or u.mu == nil or u.e== nil or u.n == nil	-- failsafe if read zero file
+						then
+							print ("[ WEB_IS_TAG ] Invalid data:" ..lt)
+							u={u=0, mu=100, e=0,n="ERROR"}
+					end	
 					u.tag=lt
 					u.exists=1
 					lt="none"

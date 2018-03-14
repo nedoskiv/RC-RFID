@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>RC-RFID <?luareturn(s.nm)?></title>
+	<link href="style.css.gz" rel="stylesheet">
+	<style>	
+		.cont-flu {
+			margin-top: 3em;
+		}
+	</style>
+</head>
+<body><input id="md" type="hidden"  value="<?lua return(s.md==1 and'5'or s.md)?>">
+	<ul class="nav fix" id="myTopnav">
+		<li><a id="distag" href="index.html">Информация</a></li>
+		<li><a id="distag" href="settings.html">Настройки</a></li>
+		<li><a href="#" class="brand">Управление на RFID</a></li>
+		<li><a href="#" id="btn_restart">Рестарт</a></li>
+		<li style="float:right;margin-right:10px;"><a href="#" id="btn_exit">Изход</a></li>
+		<li style="float:right;margin-right:10px;"><a href="http://r-control.eu" target="_blank">R-Control</a></li>
+		<li class="-icon"><a href="#" onclick="nav()">☰</a></li>
+	</ul>
+	<div id="Restart2" class="modal">
+		<div class="m-cont">
+			<span class="close" id="restart_c">&times;</span>
+			<div class="m-body">
+				<p>Желаете ли рестарт на устройството?</p>
+			</div>
+			<div class="m-foo">
+				<button id="restart_m" class="success">Да</button>
+				<button id="restart_c" class="danger">Не</button>
+			</div>
+		</div>
+	</div>
+	<div id="Loading" class="modal" style="display:block;">
+		<div class="m-cont">
+			<div class="m-body footer">
+				<h2>Зареждане...</h2>
+			</div>
+		</div>
+	</div>
+	<div id="Proceederror" class="modal">
+		<div class="m-cont">
+			<span class="close" id="proceederror_close">&times;</span>
+			<div class="m-body footer">
+				<h2>Грешка !</h2>
+			</div>
+			<div class="m-foo">
+				<button id="proceederror_close" class="danger">ЗАТВОРИ</button>
+			</div>
+		</div>
+	</div>
+	<div id="Proceed" class="modal">
+		<div class="m-cont">
+			<span class="close" id="proceed_close">&times;</span>
+			<div class="m-body">
+				<h2>Внимание !</h2>
+				<h3>Устройството ще се рестартира в режим на генериране на списъци, процесът ще е съпроводен с кратки
+				звукови сигнали, моля не го прекъсвайте. След като завъвши операцията, ще се рестартира в нормален режим.
+				Времето което му е необходимо е около секунда на всеки таг. Тоест ако имате 120 записа - около 2 минути.</h3>
+			</div>
+			<div class="m-foo">
+				<button id="proceed_confirm" class="success">ПРОДЪЛЖИ</button>
+				<button id="proceed_close" class="danger">ЗАТВОРИ</button>
+			</div>
+		</div>
+	</div>
+	<div id="Proceed1" class="modal">
+		<div class="m-cont">
+			<div class="m-body">
+				<h2 class='center'>УСТРОЙСТВОТО ПРЕМИНАВА В РЕЖИМ НА ГЕНЕРИРАНЕ НА СПИСЪЦИ. МОЛЯ НЕ ГО ПРЕКЪСВАЙТЕ ДОКАТО НЕ СПРЕ ЗВЪКОВИЯ СИГНАЛ ЗА ПОВЕЧЕ ОТ 10 СЕКУНДИ</h2>
+				<h3>След като това стане, може да презаредите страницата</h3>
+			</div>
+			<div class="m-foo">
+				<button id="proceed1_confirm" class="purple">ПРЕЗАРЕДИ СТРАНИЦАТА</button>
+			</div>
+		</div>
+	</div>
+	<div id="Restart1" class="modal">
+		<div class="m-cont">
+			<div class="m-body">
+				<h3 style="text-align:center;">Устройството се рестартира, страницатa ще презареди след <span id="countdowntimer">15 </span> секунди</h3>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="cont-flu">
+		<div class="row">
+			<div class="xs-12 sm-2 lg-2" style="min-width: 150px;">
+				<h3>RFID</h3>
+
+					<a class="side" id="distag" href="rfid.html" >Добавяне/Редактиране</a><br>
+					<a class="side" id="distag" href="rfidlist.html">Списъци</a><br>
+					<a class="side purple1" href="#">Масови операции</a><br>
+			</div>
+						<div class="xs-12 sm-10 lg-9 ">
+				<div class="row">
+					<div class="xs-12 center"><br><br><br>
+						<h2>Моля въведете кратко описание на списъкът който ще бъде генериран</h2>
+						<input style="width:70%;float:none;text-align:center;" id="lt" name="lt" type="text" required=" " value="">
+						<h2>и изберете действие което да се изпълни</h2>
+						<select id="mode" style="width:70%;float:none;">
+						<option  value="2">Генериране пълен списък на таговете</option>
+						<option  value="3">Генериране пълен списък на таговете и нулиране на броячите</option>
+						<option  disabled value="6">Нулиране на броячите</option>
+						<option  value="4">Генериране експорт файл на таговете (JSON формат)</option>
+						<option  value="7">Изтриване на всички тагове и отчети</option>
+</select><br><br><button class="info" style="margin-right: 2em;" id="btn_proceed">Изпълни</button>
+</div></div></div></div></div>
+<script>
+window.onload = function () {
+	var restart2 = document.getElementById('Restart2');
+	var restart1 = document.getElementById('Restart1');
+	var proceed1 = document.getElementById('Proceed1');
+	var proceed = document.getElementById('Proceed');
+	var proceederror = document.getElementById('Proceedrror');
+	var loading = document.getElementById('Loading');
+	var tagen = 1;
+	var int;
+	function send(page, data, callback) {
+		var req = new XMLHttpRequest();
+		req.open("POST", page, true);
+		req.setRequestHeader('Content-Type', 'application/json');
+		req.addEventListener("load", function () {
+			if (req.status < 400) {
+				callback(req.responseText);
+			} else {
+				callback(req.status);
+			}
+		});
+		req.send(JSON.stringify(data));
+	}
+		function nav() {
+			var x = document.getElementById("myTopnav");
+			if (x.classList.contains("res")) {
+				x.classList.remove('res');
+			} else {
+				x.classList.add('res');
+			}
+		}
+	function id(val) {
+		return document.getElementById(val).value
+	}
+	function check_sel(val) {
+		var s = document.getElementById(val);
+		for (var i = 0; i < s.options.length; i++) {
+			if (s.options[i].selected) {
+				return s.options[i].value
+			}
+		}
+	}
+
+	function logout() {
+		document.cookie = "id=";
+		location.href = '/login.html';
+	}
+	
+	
+	
+	function modechange() {
+		var data = {init: "modechange"};
+			data.md=document.getElementById("mode").value;
+			data.lt=document.getElementById("lt").value;
+		send("web_tag.lc", data, function (res) {
+			if (res == "true")
+				{
+					proceed.style.opacity = "0";
+					proceed.style.display = "none";
+					proceed1.style.opacity = "1";
+					proceed1.style.display = "block";
+				}
+			else
+				{
+					proceed.style.opacity = "0";
+					proceed.style.display = "none";
+					proceederror.style.opacity = "1";
+					proceederror.style.display = "block";				
+				}
+		})
+	}	
+	function reboot() {
+		var data = {init: "reboot"};
+		send("web_control.lc", data, function (res) {
+			if (res == "true")
+				{
+					restart2.style.opacity = "0";
+					restart2.style.display = "none";
+					restart1.style.opacity = "1";
+					restart1.style.display = "block";
+				    var timeleft = 15;
+					var downloadTimer = setInterval(function(){
+					timeleft--;
+					document.getElementById("countdowntimer").textContent = timeleft;
+					if(timeleft <= 0){
+						clearInterval(downloadTimer);
+						location.href = "/";}
+					},1000);
+
+				}
+		})
+	}
+	document.body.addEventListener("click", function (event) {
+		var a = document.getElementById('list');
+		//alert(event.target.id)
+		if (event.target.id == "btn_nav") {
+			nav();
+		} else if (event.target.id == "btn_exit") {
+			tg={};
+			logout();
+		} else if (event.target.id == "distag") {
+			loading.style.opacity = "1";
+			loading.style.display = "block";
+			tg={};
+		} else if (event.target.id == "btn_restart") {
+			restart2.style.opacity = "1";
+			restart2.style.display = "block";
+		} else if (event.target.id == "btn_proceed") {
+			proceed.style.opacity = "1";
+			proceed.style.display = "block";
+		} else if (event.target.id == "proceed_confirm") {
+			modechange();
+		} else if (event.target.id == "proceed1_confirm") {
+			proceed1.style.opacity = "0";
+			proceed1.style.display = "none";
+			loading.style.opacity = "1";
+			loading.style.display = "block";
+			location.href = '/';
+		} else if (event.target.id == "proceed_close") {
+			proceed.style.opacity = "0";
+			proceed.style.display = "none";
+		} else if (event.target.id == "proceederror_close") {
+			proceederror.style.opacity = "0";
+			proceederror.style.display = "none";
+		} else if (event.target.id == "restart_c") {
+			restart2.style.opacity = "0";
+			restart2.style.display = "none";
+			tagen=1;
+		} else if (event.target.id == "restart_m") {
+			reboot()
+		}  else {
+			a.style.display = 'none';
+		}
+	});
+	loading.style.opacity = "0";
+	loading.style.display = "none";
+	var currentDate = new Date(); 
+	document.getElementById('lt').value = "Отчет от " + currentDate.toLocaleDateString('bg-BG');
+};
+</script>
+</body>
+
+</html>

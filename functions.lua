@@ -18,7 +18,7 @@ end
 function fwoj(f,s)	-- file_write_override_json
  local ok, json = pcall(sjson.encode, s)
   if ok then
-   if file.open(f, "w") then
+   if file.open(f, "w+") then
     file.write(json)
     file.close()
    end
@@ -31,15 +31,19 @@ end
 
 
 gpio.mode(rg,gpio.INPUT,gpio.PULLUP)
+s={}
 if file.open("setting.json", "r") and gpio.read(rg)==1
 	then
 		local ok, json = pcall(sjson.decode,file.read('\n'))
 		s = ok and json or {}
 		file.close()
-	else
-		print ("[ FUNCTIONS ] Default config loaded!")									
+end
+if s.wifi_id == nil
+	then								
 		s={		
-		md=1,				-- mode, 1 normal, 2 regenerate taglist.html, 3 regenerate usagelist.html, 4 remove all tags, 5 normal mode but keep s.token
+		md=0,				-- mode,0 normal (default config), 1 normal, 2 regenerate fulllist.html, 3 regenerate fulllist.html and clear counters,
+							-- 4 generate exportag.html, 5 normal mode but keep s.token, 6 clear all counters, 7 delete all tags
+		msg=3,				--	 display "default settings" msg on index.html, 3 defaul, 2 failure, 1 success
 		ss1=0,				-- RC522 SDA(SS) pin	(avalable GPIO are: 0,8,1,2,9,10 last two are uart pins)
 		ss2=8,				--  ( > 12 means not used reader 2 disabled)		
 		bg=2,				--	(>12=disabled)buzzer gpio
@@ -55,7 +59,7 @@ if file.open("setting.json", "r") and gpio.read(rg)==1
 --		wifi_id = "RC8",
 		wifi_id = "r-control.eu",
 		wifi_pass = "88888888",
-		wifi_mode = "ST",
+		wifi_mode = "AP",
 		wifi_phy = wifi.PHYMODE_N,
 		nm="RC-RFID",		-- system name
 		mqtt_port = "",
@@ -71,8 +75,8 @@ if file.open("setting.json", "r") and gpio.read(rg)==1
 end
 gpio.mode(s.dg,gpio.OUTPUT)
 gpio.write(s.dg,s.dcv)
-
-if s.md == 1			-- only in normal mode regenerate token, otherwise keep old one to preserve user logged in
+s.md=tonumber(s.md)
+if s.md < 2			-- only in normal mode regenerate token, otherwise keep old one to preserve user logged in
 	then
 		s.token=node.random(10001,99999)
 end
@@ -99,4 +103,11 @@ if s.bg >12
 		end
 end
 
-
+if s.md==0		--	beep if system is with default config
+	then
+		print ("[ FUNCTIONS ] Default config loaded!")	
+		buzz(1)
+		tmr.delay(700000)
+		buzz(0)
+		tmr.delay(350000)
+end

@@ -1,21 +1,23 @@
-srv = net.createServer(net.TCP,10)
+srv = net.createServer(net.TCP,20)
 cr={}
-tmr.alarm(5, 10000, tmr.ALARM_SEMI, function()		-- it is good timer interval to match TCP timeout time 
+tmr.alarm(5, 15000, tmr.ALARM_SEMI, function()
 	cr=nil
 	cr={}
+	print ("[ WEB5_TIMER_DEBUG ] Coroutines cleared.")
 end )
 tmr.stop(5)
 srv:listen(80,function(conn)
  local cn
  conn:on("receive", function(conn,payload)
-	tmr.stop(5)
-	tmr.start(5)
 	local req = dofile("web_request.lc")(payload)
 	cn=req.uri.file
 	cr[cn] = nil
 	collectgarbage()
 	if req
 		then
+			tmr.stop(5)
+			tmr.start(5)
+--			print ("[ WEB5_RECV_DEBUG ] Timer reset.")
 			cr[cn] = coroutine.create(dofile("web_file.lc"))
 	end
 
@@ -29,12 +31,15 @@ srv:listen(80,function(conn)
 			then
 				dofile("web_file.lc")(conn, req.uri.file,req.getRequestData(payload),req.cookie)
 	end
-	print(node.heap())
+	print("[ WEB5 ] "..node.heap())
 end)
 
  conn:on("sent", function(conn)
  if cr[cn]
 	then
+--		tmr.stop(5)
+--		tmr.start(5)
+--		print ("[ WEB5_SENT_DEBUG ] Timer reset.")
 		local crStatus = coroutine.status(cr[cn])
 		if crStatus == "suspended"
 			then
@@ -42,15 +47,16 @@ end)
 				if not status
 					then
 						conn:close()
-
 						cr[cn] = nil
 						collectgarbage()
+						print ("[ WEB5_SENT_DEBUG ] Conn:close (status)")
 				end
 			elseif crStatus == "dead" 
 				then
 					conn:close()
 					cr[cn] = nil
 					collectgarbage()
+					print ("[ WEB5_SENT_DEBUG ] Conn:close (dead)")
 		end
  end
 end)

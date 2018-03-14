@@ -24,6 +24,11 @@ local serverFiles = {
    'RC522.lua',
    'functions.lua',
    'tag4.lua',
+   'gen_list.lua',
+   'gen_list_c.lua',
+   'gen_export.lua',
+   'deletetags.lua',
+   'init1.lua',
    'reader6.lua'
 }
 for i, f in ipairs(serverFiles) do compileAndRemoveIfNeeded(f) end

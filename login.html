@@ -38,6 +38,13 @@
 	<div id="alert" class="alert danger" style="display: none;">
 		<span class="close" onclick="this.parentElement.style.display='none';">&times;</span>Отказан достъп!
 	</div>
+	<div id="Loading" class="modal">
+		<div class="m-cont">
+			<div class="m-body footer">
+				<h2>Зареждане...</h2>
+			</div>
+		</div>
+	</div>
 	<div class="cont center purple">
 		<h1><?lua return(s.nm)?></h1>Системата изисква ауторизация.
 		<div class="row">
@@ -90,6 +97,8 @@
 		}
 
 		function login() {
+			document.getElementById('Loading').style.opacity = "1";
+			document.getElementById('Loading').style.display = "block";
 			document.getElementById('alert').style.display = "none";
 			var data = {};
 			data.init = "auth";
@@ -97,6 +106,8 @@
 			data.pass = name("pass");
 			send("web_control.lc", data, function(res) {
 				if (res == "false") {
+					document.getElementById('Loading').style.opacity = "0";
+					document.getElementById('Loading').style.display = "none";
 					document.getElementById('alert').style.display = "inline";
 				} else {
 					document.cookie = "id=" + res;
