@@ -47,6 +47,8 @@ This web server gonna be used for basic frontend interface:
 
 * testing.
 * possible wireless CFG problem, investigate
+* MQTT logging
+* find a way to import tags thru web interface
 
 # Short installation instructions:
 
@@ -64,6 +66,7 @@ default wireless password is "88888888"
 # Limitations:
 
 * Due to nodemcu file.list function, scripts are capable of generate tag lists/export json file for around 200-250 tags. Increasing it cause out of memory error that cannot be avoided unless someone rewrite nodemcu file module. However system still work, add/edit/delete tags but cannot generate list.
+* Web server cannot handle more than 2 connection at same time (out of memory) so make sure you use only one browser window to access web interface.
 
 
 ### Pin Layout
