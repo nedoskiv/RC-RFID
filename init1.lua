@@ -29,8 +29,7 @@ end
 
 --wifi init
 cfg={}		
-if s.wifi_mode=="AP"
-	then
+if s.wifi_mode=="AP"	then
 		cfg.ssid=s.wifi_id	
 		if #(s.wifi_pass) < 8	-- if no password or invalid one, start up open network
 			then
@@ -57,7 +56,6 @@ if s.wifi_mode=="AP"
 end
 cfg=nil
 dofile('web5.lc')
-dofile("RC522.lc")
 dofile("reader6.lc")
 			buzz(1)
 			tmr.delay(100000)
