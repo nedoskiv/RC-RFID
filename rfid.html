@@ -199,18 +199,21 @@
 	</div>
 <script>
 window.onload = function () {
-	var restart2 = document.getElementById('Restart2');
-	var restart1 = document.getElementById('Restart1');
-	var clear1 = document.getElementById('Clear1');
-	var clearerror = document.getElementById('Clearerror');
-	var cleared = document.getElementById('Cleared');
-	var delete1 = document.getElementById('Delete1');
-	var deleteerror = document.getElementById('Deleteerror');
-	var deleted = document.getElementById('Deleted');
-	var saveerror = document.getElementById('Saveerror');
-	var saved = document.getElementById('Saved');
-	var tag1 = document.getElementById('Tag1');
-	var loading = document.getElementById('Loading');
+ function id(n){
+     return document.getElementById(n);
+ }
+	var restart2 = id('Restart2');
+	var restart1 = id('Restart1');
+	var clear1 = id('Clear1');
+	var clearerror = id('Clearerror');
+	var cleared = id('Cleared');
+	var delete1 = id('Delete1');
+	var deleteerror = id('Deleteerror');
+	var deleted = id('Deleted');
+	var saveerror = id('Saveerror');
+	var saved = id('Saved');
+	var tag1 = id('Tag1');
+	var loading = id('Loading');
 	var tagen = 1;
 	var int;
 	function send(page, data, callback) {
@@ -227,18 +230,18 @@ window.onload = function () {
 		req.send(JSON.stringify(data));
 	}
 		function nav() {
-			var x = document.getElementById("myTopnav");
+			var x = id("myTopnav");
 			if (x.classList.contains("res")) {
 				x.classList.remove('res');
 			} else {
 				x.classList.add('res');
 			}
 		}
-	function id(val) {
-		return document.getElementById(val).value
-	}
+//	function id(val) {
+//		return document.getElementById(val).value
+//	}
 	function check_sel(val) {
-		var s = document.getElementById(val);
+		var s = id(val);
 		for (var i = 0; i < s.options.length; i++) {
 			if (s.options[i].selected) {
 				return s.options[i].value
@@ -256,7 +259,7 @@ window.onload = function () {
 		function tag() {
 			if (tagen == 1)
 				{
-					document.getElementById('waitfortag1').innerHTML = "Сканирайте таг за да го добавите или редактирате";
+					id('waitfortag1').innerHTML = "Сканирайте таг за да го добавите или редактирате";
 					var data = {};
 					var tg = {};
 					data.init = "tag";
@@ -266,7 +269,7 @@ window.onload = function () {
 						{
 							y = 0
 						}	
-					document.getElementById('waitfortag').innerHTML = x[y];
+					id('waitfortag').innerHTML = x[y];
 					y = y + 1
 
 					
@@ -275,43 +278,43 @@ window.onload = function () {
 							tg={};
 						} else {
 							tg = JSON.parse(res);
-							document.getElementById("tag_save").disabled = false;
-							document.getElementById("tag_delete").disabled = false;
-							document.getElementById("tag_clear").disabled = false;
-							document.getElementById("tag_save").style.textDecoration = "none";
+							id("tag_save").disabled = false;
+							id("tag_delete").disabled = false;
+							id("tag_clear").disabled = false;
+							id("tag_save").style.textDecoration = "none";
 							tag1.style.opacity = "1";
 							tag1.style.display = "block";
 							tagen = 2;
-							document.getElementById("u").value = tg.u;
-							document.getElementById("mu").value = tg.mu;
-							document.getElementById("tag").value = tg.tag;
-							document.getElementById("n").value = tg.n;
-							document.getElementById("e").value = tg.e;
+							id("u").value = tg.u;
+							id("mu").value = tg.mu;
+							id("tag").value = tg.tag;
+							id("n").value = tg.n;
+							id("e").value = tg.e;
 							if (tg.exists == "1")
 								{
-								document.getElementById("taglabel").innerHTML="РЕДАКТИРАНЕ";
-								document.getElementById("taglabel").style.color = "#7ed321";
-								document.getElementById("tag_clear").style.display = "initial";
-								document.getElementById("tag_delete").style.display = "initial";
+								id("taglabel").innerHTML="РЕДАКТИРАНЕ";
+								id("taglabel").style.color = "#7ed321";
+								id("tag_clear").style.display = "initial";
+								id("tag_delete").style.display = "initial";
 								}
 							else
 								{
-								document.getElementById("taglabel").innerHTML="ДОБАВЯНЕ";
-								document.getElementById("taglabel").style.color = "#800080";
-								document.getElementById("tag_clear").style.display = "none";
-								document.getElementById("tag_delete").style.display = "none";
+								id("taglabel").innerHTML="ДОБАВЯНЕ";
+								id("taglabel").style.color = "#800080";
+								id("tag_clear").style.display = "none";
+								id("tag_delete").style.display = "none";
 								}
 						}
 					})
 				}
 			else
 				{
-				document.getElementById('waitfortag1').innerHTML = "Обработване, моля изчакайте.";
+				id('waitfortag1').innerHTML = "Обработване, моля изчакайте.";
 				}
 	}	
 	function deletetag() {
 		var data = {init: "delete"};
-		data.tag = document.getElementById("tag").value;
+		data.tag = id("tag").value;
 		send("web_tag.lc", data, function (res) {
 
 			if (res == "true")
@@ -333,7 +336,7 @@ window.onload = function () {
 	}	
 	
 	
-	var timeleftt = document.getElementById('waitfortag');
+	var timeleftt = id('waitfortag');
 	var downloadTimert = setInterval(function(){
 	tag();
     if (parseInt(timeleftt.innerHTML)<0) 
@@ -344,7 +347,7 @@ window.onload = function () {
 	
 	function clearcounter() {
 		var data = {init: "clearcounter"};
-			data.tag=document.getElementById("tag").value;	
+			data.tag=id("tag").value;
 		send("web_tag.lc", data, function (res) {
 			if (res == "true")
 				{
@@ -365,11 +368,11 @@ window.onload = function () {
 	
 	function savetag() {
 		var data = {init: "savetag"};
-			data.u=document.getElementById("u").value;
-			data.mu=document.getElementById("mu").value;
-			data.tag=document.getElementById("tag").value;
-			data.n=document.getElementById("n").value;
-			data.e=document.getElementById("e").value;		
+			data.u=id("u").value;
+			data.mu=id("mu").value;
+			data.tag=id("tag").value;
+			data.n=id("n").value;
+			data.e=id("e").value;
 		send("web_tag.lc", data, function (res) {
 			if (res == "true")
 				{
@@ -399,7 +402,7 @@ window.onload = function () {
 				    var timeleft = 15;
 					var downloadTimer = setInterval(function(){
 					timeleft--;
-					document.getElementById("countdowntimer").textContent = timeleft;
+					id("countdowntimer").textContent = timeleft;
 					if(timeleft <= 0){
 						clearInterval(downloadTimer);
 						location.href = "/";}
@@ -409,7 +412,6 @@ window.onload = function () {
 		})
 	}
 	document.body.addEventListener("click", function (event) {
-		var a = document.getElementById('list');
 		//alert(event.target.id)
 		if (event.target.id == "btn_nav") {
 			nav();
@@ -418,42 +420,42 @@ window.onload = function () {
 			tg={};
 			logout();
 		} else if (event.target.id == "tag_delete") {
-			document.getElementById("delete1title").innerHTML = document.getElementById("tag").value + " - " + document.getElementById("n").value;
+			id("delete1title").innerHTML = id("tag").value + " - " + id("n").value;
 			tagen=2;
-			document.getElementById("delete1_m").disabled = false;
-			document.getElementById("delete1_m").style.textDecoration = "none";
+			id("delete1_m").disabled = false;
+			id("delete1_m").style.textDecoration = "none";
 			tag1.style.opacity = "0";
 			tag1.style.display = "none";
 			delete1.style.opacity = "1";
 			delete1.style.display = "block";
 		} else if (event.target.id == "tag_clear") {
-			document.getElementById("clear1title").innerHTML = document.getElementById("tag").value + " - " + document.getElementById("n").value;
+			id("clear1title").innerHTML = id("tag").value + " - " + id("n").value;
 			tagen=2;
-			document.getElementById("clear1_m").disabled = false;
-			document.getElementById("clear1_m").style.textDecoration = "none";
+			id("clear1_m").disabled = false;
+			id("clear1_m").style.textDecoration = "none";
 			tag1.style.opacity = "0";
 			tag1.style.display = "none";
 			clear1.style.opacity = "1";
 			clear1.style.display = "block";
 		} else if (event.target.id == "delete1_m") {
-			document.getElementById("delete1_m").disabled = true;
-			document.getElementById("delete1_m").style.textDecoration = "line-through";
+			id("delete1_m").disabled = true;
+			id("delete1_m").style.textDecoration = "line-through";
 			tagen=2;
 			deletetag();
 		} else if (event.target.id == "tag_save") {
 			tagen=2;
-			document.getElementById("tag_save").disabled = true;
-			document.getElementById("tag_delete").disabled = true;
-			document.getElementById("tag_clear").disabled = true;
-			document.getElementById("tag_save").style.textDecoration = "line-through";
+			id("tag_save").disabled = true;
+			id("tag_delete").disabled = true;
+			id("tag_clear").disabled = true;
+			id("tag_save").style.textDecoration = "line-through";
 			savetag();
 		} else if (event.target.id == "tag_clear") {
 			restart2.style.opacity = "0";
 			restart2.style.display = "none";
 			tagen=1;
 		} else if (event.target.id == "clear1_m") {
-				document.getElementById("clear1_m").disabled = true;
-			document.getElementById("clear1_m").style.textDecoration = "line-through";
+				id("clear1_m").disabled = true;
+			id("clear1_m").style.textDecoration = "line-through";
 			tagen=2;
 			clearcounter();
 		} else if (event.target.id == "clear_close") {
@@ -504,7 +506,7 @@ window.onload = function () {
 		} else if (event.target.id == "restart_m") {
 			reboot()
 		}  else {
-			a.style.display = 'none';
+
 		}
 	});
 	loading.style.opacity = "0";
