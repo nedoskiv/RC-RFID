@@ -43,6 +43,7 @@ This web server gonna be used for basic frontend interface:
 * Added tag list creation is separate boot mode
 * Added export tag (JSON format) in separate boot mode
 * Added user authentication (for access) via login screen.
+* Added amound calculation based on tag usage (lists)
 
 # TODO:
 
