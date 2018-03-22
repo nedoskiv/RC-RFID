@@ -60,10 +60,10 @@
 						<div class="xs-12 sm-10 lg-9 ">
 				<div class="row">
 					<div class="xs-12 center"><br><br><br>
-					<?lua if file.open("listtitle", "r") then local a=file.read() file.close() return ('<h2>Пълен списък на таговете с описание:</h2><a style="font-weight:bold;" href="fulllist.html">'..a..'</a>') else return('<h2>Няма генериран списък</h2>')end?>
-					<?lua if file.exists("listtitlec") then return (' - <span style="font-weight:bold;color:#7ed321">Завършен</span>') else return (' - <span style="font-weight:bold;color:#f44336">Незавършен</span>')end?>
-					<?lua if file.open("exporttitle", "r") then local a=file.read() file.close() return ('<h2>JSON експорт файл с описание:</h2><a style="font-weight:bold;" href="exportlist.txt">'..a..'</a>') else return('<h2>Няма генериран експорт файл</h2>')end?>
-					<?lua if file.exists("exporttitlec") then return (' - <span style="font-weight:bold;color:#7ed321">Завършен</span>') else return (' - <span style="font-weight:bold;color:#f44336">Незавършен</span>')end?>
+					<?lua local a=frj("listtitle") if a~=false then return ('<h2>Пълен списък на таговете с описание:</h2><a style="font-weight:bold;" href="fulllist.html">'..a.lt..'</a>') else return('<h2>Няма генериран списък</h2>')end?>
+					<?lua if file.exists("listtitle") then if file.exists("listtitlec") then return (' - <span style="font-weight:bold;color:#7ed321">Завършен</span>') else return (' - <span style="font-weight:bold;color:#f44336">Незавършен</span>')end end?>
+					<?lua local a=frj("listtitle") if a~=false then return ('<h2>JSON експорт файл с описание:</h2><a style="font-weight:bold;" href="exportlist.txt">'..a.lt..'</a>') else return('<h2>Няма генериран експорт файл</h2>')end?>
+					<?lua if file.exists("exporttitle") then if file.exists("exporttitlec") then return (' - <span style="font-weight:bold;color:#7ed321">Завършен</span>') else return (' - <span style="font-weight:bold;color:#f44336">Незавършен</span>')end end?>
 </div></div></div></div></div>
 <script>
 window.onload = function () {

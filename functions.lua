@@ -55,7 +55,6 @@ if s.wifi_id == nil
 		cnt=1, 				--	tag usage count (1 enabled, 0 - disabled, 2 learning mode with counting, 3 learning mode without counting)
 							--	in learning mode, device create record for every unknown tag (grand access too)
 		mu=100,				--	Usage limit for learning mode registered TAGs, not interface configurable yet
-		wa=1,				--	grant access thru password entered in web interface via wifi (1 enabled, other disabled)
 --		wifi_id = "RC8",
 		wifi_id = "r-control.eu",
 		wifi_pass = "88888888",
@@ -68,7 +67,7 @@ if s.wifi_id == nil
 		mqtt = "OFF",
 		mqtt_login = "",
 		mqtt_time = "",
-		auth="ON",
+		auth=1,					-- 0 disabled, 1 auth enabled, 2 auth enabled + web tag auth enabled
 		auth_login="admin",
 		auth_pass="adm1n"
 		}

@@ -1,6 +1,6 @@
 srv = net.createServer(net.TCP,20)
 cr={}
-tmr.alarm(5, 15000, tmr.ALARM_SEMI, function()
+tmr.alarm(5, 20000, tmr.ALARM_SEMI, function()
 	cr=nil
 	cr={}
 	print ("[ WEB5_TIMER_DEBUG ] Coroutines cleared.")

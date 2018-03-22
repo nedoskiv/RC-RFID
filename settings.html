@@ -51,10 +51,11 @@
 <label for="wifi_id">Име на мрежа (SSID):</label><input id="search" type="submit" value="Списък"><ul id="list" style="display:none;">
 </ul></div></div></div><div class="xs-10"><div class="group"><input id="wifi_pass" type="password" required="" value="<?lua return(s.wifi_pass)?>"><label for="wifi_pass">Парола</label></div></div></div></div>
 <div class="xs-12 sm-6 lg-6">
-<h3>Ауторизация :</h3><div class="row center"><div class="xs-10"><div class="group"><select id="auth">
-<option <?lua return(s.auth=="OFF"and'selected'or'')?> value="OFF">Изключена</option>
-<option <?lua return(s.auth=="ON"and'selected'or'')?> value="ON">Включена</option></select>
-</div></div></div><div class="row center"><div class="xs-10"><div class="group"><input id="auth_login" type="text" required="" value="<?lua return(s.auth_login)?>"><label for="auth_login">Login</label></div></div></div>
+<h3>Ауторизация / WEB RFID достъп:</h3><div class="row center"><div class="xs-10"><div class="group"><select id="auth">
+<option <?lua return(s.auth==0 and'selected'or'')?> value="0">Изключена/Забранен</option>
+<option <?lua return(s.auth==1 and'selected'or'')?> value="1">Включена/Забранен</option>
+<option <?lua return(s.auth==2 and'selected'or'')?> value="2">Включена/Разрешен</option></select>
+</div></div></div><div class="row center"><div class="xs-10"><div class="group"><input id="auth_login" disabled type="text" required="" value="<?lua return(s.auth_login)?>"><label for="auth_login">Login</label></div></div></div>
 <div class="row center"><div class="xs-10"><div class="group"><input id="auth_pass" type="password" required="" value="<?lua return(s.auth_pass)?>"><label for="auth_pass">Password</label></div></div></div>
 <div class="row center"><div class="xs-10"><div class="group"><input id="nm" type="text" required="" value="<?lua return(s.nm)?>"><label for="nm">Име на системата</label></div></div></div></div></div>
 <div class="row"><div class="xs-12"><h3>MQTT :</h3></div></div><div class="row"><div class="xs-12 sm-6 lg-6">
@@ -138,15 +139,8 @@
 <label for="mu">Лимит на новорегистрираните тагове:</label>
 <input id="mu" type="number" min="1" max="100000" value="<?lua return(s.mu)?>">
 </div></div></div>
-<div class="row center"><div class="xs-10"><div class="group left">
-<label for="wa">Ауторизация през WEB интерфейса:</label><select id="wa">
-<option <?lua return(s.wa==1 and'selected'or'')?> value="1">Включена</option>
-<option <?lua return(s.wa==2 and'selected'or'')?> value="2">Изключена</option>
-</select>
-<input id="md" type="hidden"  value="<?lua return(s.md<2 and'1'or s.md)?>">
-</div></div></div>
 </div></div>
-
+<input id="md" type="hidden"  value="<?lua return(s.md<2 and'1'or s.md)?>">
 
 <br><br><div class="row"><div class="xs-12 sm-6 lg-6">&nbsp;</div><div class="row end">
 <div class="xs-12"><div class="group"><button class="info" style="margin-right: 2em;" id="btn_save">Save</button>

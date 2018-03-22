@@ -38,6 +38,9 @@
 	<div id="alert" class="alert danger" style="display: none;">
 		<span class="close" onclick="this.parentElement.style.display='none';">&times;</span>Отказан достъп!
 	</div>
+	<div id="access" class="alert success" style="display: none;">
+		<span class="close" onclick="this.parentElement.style.display='none';">&times;</span>Достъп резрешен!
+	</div>
 	<div id="Loading" class="modal">
 		<div class="m-cont">
 			<div class="m-body footer">
@@ -65,7 +68,7 @@
 		</div>
 		<div class="row start">
 			<div class="xs-12 ">
-				<span style="font-size:80%">Първоначалните стойности са "admin" с парола "adm1n"</span>
+				<span style="float:right;font-size:80%">Разработка на <a style="color:white;text-decoration:none;font-weight:bold;" href="http://r-control.eu" target="_blank">R-CONTROL.EU</a></span>
 			</div>
 		</div>
 		<div class="row end">
@@ -78,7 +81,9 @@
 		<br>
 	</div>
 	<script>
-		function send(page, date, callback) {
+		function send(page, data, callback) {
+			console.log(data);
+			console.log(JSON.stringify(data));
 			var req = new XMLHttpRequest();
 			req.open("POST", page, true);
 			req.setRequestHeader('Content-Type', 'application/json');
@@ -89,7 +94,7 @@
 					callback(req.status)
 				}
 			});
-			req.send(JSON.stringify(date));
+			req.send(JSON.stringify(data));
 		}
 
 		function name(val) {
@@ -104,17 +109,22 @@
 			data.init = "auth";
 			data.login = name("login");
 			data.pass = name("pass");
-			send("web_control.lc", data, function(res) {
+			send("web_login.lc", data, function(res) {
 				if (res == "false") {
 					document.getElementById('Loading').style.opacity = "0";
 					document.getElementById('Loading').style.display = "none";
 					document.getElementById('alert').style.display = "inline";
-				} else {
+				} else if (res == "access") {
+					document.getElementById('Loading').style.opacity = "0";
+					document.getElementById('Loading').style.display = "none";
+					document.getElementById('access').style.display = "inline";
+				}				else {
 					document.cookie = "id=" + res;
 					location.href = '/';
 				}
 			})
 		}
+		document.getElementById("login").focus(); 
 	</script>
 </form>
 </body>

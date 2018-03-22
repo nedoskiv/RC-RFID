@@ -10,12 +10,15 @@ local function clearcounter(tab)
 	return fwoj("T_"..tab.tag,u)
 end
 local function savetag(tab)
+	local sp,n=string.find(tab.u,"/")
 	local u = {
-	u=tab.u,
 	mu=tab.mu,
 	e=tab.e,
-	n=tab.n
+	n=tab.n,
+	p=tab.p
 	}
+	u.u=string.sub(tab.u,1,sp-1)
+	u.wu=string.sub(tab.u,sp+1)
 --	for k,v in pairs(tab)
 --		do
 --			u[k] = v
@@ -68,12 +71,23 @@ return function (tab)
 				s.md=tab.md
 				s.msg=2					-- set msg to failure
 				r=fwoj("setting.json",s)
-				if file.open(fn, "w+")
-					then
-						file.write(tab.lt)
-						file.close()
-				end
+				tab.init=nil
+				fwoj(fn,tab)
+--				if file.open(fn, "w+")
+--					then
+--						file.write(tab.lt)
+--						file.close()
+--				end
 				tmr.create():alarm(2000, tmr.ALARM_SINGLE, function()print("[ INFO ] Mode changed to "..s.md..". Rebooting")node.restart()end)
+		elseif tab.init=="manual"
+			then
+				if #(tab.tag) ~= 10
+					then
+						r="false"
+					else
+						lt=tab.tag
+						r="true"
+				end
 --		else
 --			print ("HEEEEEEEEEEEre   "..tab.init)
 	end

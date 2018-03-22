@@ -20,6 +20,8 @@ local function getRequestData(payload)
    payload=nil
    collectgarbage()
    if mimeType=="application/json"then
+--   print ("[ WEB_REQUEST ] json:")
+--   print (body)
    local ok, json = pcall(sjson.decode,body)
    requestData = ok and json or {}
    elseif mimeType=="application/x-www-form-urlencoded" then
@@ -41,6 +43,8 @@ local function parseUri(uri)
  return r
 end
 return function (request)
+--   print ("[ WEB_REQUEST ] request:")
+--	print (request)
    local e=request:find("\r\n",1,true)
    if not e then return nil end
    local line = request:sub(1, e - 1)

@@ -12,9 +12,9 @@ local compileAndRemoveIfNeeded = function(f)
 end
 
 local serverFiles = {
-
    'obtn4.lua',
    'web5.lua',
+   'web_tag4.lua',
    'web_tag.lua',
    'web_login.lua',
    'web_is_tag.lua',
@@ -29,6 +29,8 @@ local serverFiles = {
    'gen_export.lua',
    'deletetags.lua',
    'init1.lua',
+   'list_p.lua',
+   'list_s.lua',
    'reader6.lua'
 }
 for i, f in ipairs(serverFiles) do compileAndRemoveIfNeeded(f) end

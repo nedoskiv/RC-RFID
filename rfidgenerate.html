@@ -74,7 +74,7 @@
 				<h3>След като това стане, може да презаредите страницата</h3>
 			</div>
 			<div class="m-foo">
-				<button id="proceed1_confirm" class="purple">ПРЕЗАРЕДИ СТРАНИЦАТА</button>
+				<button id="proceed1_confirm" class="info">ПРЕЗАРЕДИ СТРАНИЦАТА</button>
 			</div>
 		</div>
 	</div>
@@ -99,8 +99,9 @@
 						<div class="xs-12 sm-10 lg-9 ">
 				<div class="row">
 					<div class="xs-12 center"><br><br><br>
-						<h2>Моля въведете кратко описание на списъкът който ще бъде генериран</h2>
-						<input style="width:70%;float:none;text-align:center;" id="lt" name="lt" type="text" required=" " value="">
+						<h2>Моля въведете кратко описание на списъкът който ще бъде генериран и сума на базата на която ще се калкулират такси</h2>
+						<input style="width:70%;float:none;text-align:center;" id="lt" name="lt" type="text" required=" " value=""><br>
+						<input style="width:70%;float:none;text-align:center;" id="ts" name="ts" type="number" min="1" max="100000" value="100">
 						<h2>и изберете действие което да се изпълни</h2>
 						<select id="mode" style="width:70%;float:none;">
 						<option  value="2">Генериране пълен списък на таговете</option>
@@ -164,6 +165,7 @@ window.onload = function () {
 		var data = {init: "modechange"};
 			data.md=document.getElementById("mode").value;
 			data.lt=document.getElementById("lt").value;
+			data.ts=document.getElementById("ts").value;
 		send("web_tag.lc", data, function (res) {
 			if (res == "true")
 				{

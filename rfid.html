@@ -19,7 +19,7 @@
 	</style>
 </head>
 <?lua if arg['tag'] then  lt=arg['tag'] else lt="none" end ?>
-<body><input id="md" type="hidden"  value="<?lua return(s.md==1 and'5'or s.md)?>">
+<body>
 	<ul class="nav fix" id="myTopnav">
 		<li><a id="distag" href="index.html">Информация</a></li>
 		<li><a id="distag" href="settings.html">Настройки</a></li>
@@ -149,20 +149,27 @@
 		<div class="m-cont">
 			<span class="close" id="tag_c">&times;</span>
 			<div class="m-body">
+					<input id="md" type="hidden"  value="<?lua return(s.md==1 and'5'or s.md)?>">
+					<input id="tag" type="hidden" value="">
 					<h2 class="center" id="taglabel">ЗАРЕЖДАНЕ, МОЛЯ ИЗЧАКАЙТЕ</h2>
-					<label for="tag">RFID</label>
-					<input id="tag" type="text" required=""  readonly>
+					<label for="tagv">RFID / WEB interface username</label>
+					<input id="tagv" type="text" readonly>
 					<br>
 					<label for="n">ИМЕ</label>
 					<input id="n" type="text" required="" value="">
 					<br>
-					<label for="e">Активен</label><select id="e">
-					<option value="1">ДА</option>
-					<option value="2">НЕ</option>
+					<label for="e">Достъп:</label><select id="e">
+					<option value="1">чрез RFID четец</option>
+					<option value="2">Забранен</option>
+					<option value="3">чрез WEB интерфейс</option>
+					<option value="4">чрез RFID четец и WEB интерфейс</option>
 					</select>
 					<br>
-					<label for="u">Използван до момента:</label>
-					<input id="u" type="number" readonly>
+					<label for="p">Парола за WEB интерфейс</label>
+					<input id="p" type="text">
+					<br>
+					<label for="u">Използван до момента (RFID/WEB):</label>
+					<input id="u" type="text" readonly>
 					<br>
 					<label for="mu">Лимит:</label>
 					<input id="mu" type="number" min="1" max="100000">
@@ -187,7 +194,11 @@
 			<div class="xs-12 sm-10 lg-9 ">
 				<div class="row">
 					<div class="xs-12">
-					<h2 style="text-align:center;"><span id="waitfortag">-----</span><br><span id="waitfortag1">Сканирайте таг за да го добавите или редактирате</span></h2>
+					<h2 style="text-align:center;"><span id="waitfortag">-----</span><br><span id="waitfortag1">Сканирайте таг за да го добавите/редактирате</span>
+					<br>или въведете RFID ръчно.</h2>
+					<label for="tagm">RFID (10 знака дължина)</label>
+					<input id="tagm" type="text" ><br><button id="tag_edit" style="float:right;" class="info">Продължи</button>
+					<br><h3 id="tag_short" style="color:red; display:none;">Невалидна дължина!</h3>
 					</div>
 				</div>
 				<br>
@@ -256,7 +267,7 @@ window.onload = function () {
 		function tag() {
 			if (tagen == 1)
 				{
-					document.getElementById('waitfortag1').innerHTML = "Сканирайте таг за да го добавите или редактирате";
+					document.getElementById('waitfortag1').innerHTML = "Сканирайте таг за да го добавите/редактирате";
 					var data = {};
 					var tg = {};
 					data.init = "tag";
@@ -282,11 +293,21 @@ window.onload = function () {
 							tag1.style.opacity = "1";
 							tag1.style.display = "block";
 							tagen = 2;
-							document.getElementById("u").value = tg.u;
+							tg.uname=tg.tag.replace(/A/g,"Z");
+							tg.uname=tg.uname.replace(/1/g,"A");
+							tg.uname=tg.uname.replace(/F/g,"1");
+							tg.uname=tg.uname.replace(/2/g,"F");
+							tg.uname=tg.uname.replace(/0/g,"2");
+							tg.uname=tg.uname.replace(/7/g,"0");
+							tg.uname=tg.uname.replace(/3/g,"7");
+							tg.uname=tg.uname.replace(/C/g,"3");
+							document.getElementById("u").value = tg.u+"/"+tg.wu;
 							document.getElementById("mu").value = tg.mu;
+							document.getElementById("tagv").value = tg.tag + " / " + tg.uname;
 							document.getElementById("tag").value = tg.tag;
 							document.getElementById("n").value = tg.n;
 							document.getElementById("e").value = tg.e;
+							document.getElementById("p").value = tg.p;
 							if (tg.exists == "1")
 								{
 								document.getElementById("taglabel").innerHTML="РЕДАКТИРАНЕ";
@@ -306,7 +327,7 @@ window.onload = function () {
 				}
 			else
 				{
-				document.getElementById('waitfortag1').innerHTML = "Обработване, моля изчакайте.";
+				document.getElementById('waitfortag1').innerHTML = "Обработване, моля изчакайте";
 				}
 	}	
 	function deletetag() {
@@ -369,7 +390,8 @@ window.onload = function () {
 			data.mu=document.getElementById("mu").value;
 			data.tag=document.getElementById("tag").value;
 			data.n=document.getElementById("n").value;
-			data.e=document.getElementById("e").value;		
+			data.e=document.getElementById("e").value;
+			data.p=document.getElementById("p").value;	
 		send("web_tag.lc", data, function (res) {
 			if (res == "true")
 				{
@@ -384,6 +406,23 @@ window.onload = function () {
 					tag1.style.display = "none";
 					saveerror.style.opacity = "1";
 					saveerror.style.display = "block";				
+				}
+		})
+	}
+	function manual() {
+		var data = {init: "manual"};
+			data.tag=document.getElementById("tagm").value;
+
+		send("web_tag.lc", data, function (res) {
+			document.getElementById("tag_edit").disabled = false;
+			document.getElementById("tag_edit").style.textDecoration = "none";
+			if (res == "true")
+				{
+				document.getElementById("tag_short").style.display = "none";	
+				}
+			else
+				{
+				document.getElementById("tag_short").style.display = "inline";				
 				}
 		})
 	}	
@@ -440,6 +479,11 @@ window.onload = function () {
 			document.getElementById("delete1_m").style.textDecoration = "line-through";
 			tagen=2;
 			deletetag();
+		} else if (event.target.id == "tag_edit") {
+			document.getElementById("tag_short").style.display = "none";
+			document.getElementById("tag_edit").disabled = true;
+			document.getElementById("tag_edit").style.textDecoration = "line-through";
+			manual();
 		} else if (event.target.id == "tag_save") {
 			tagen=2;
 			document.getElementById("tag_save").disabled = true;
