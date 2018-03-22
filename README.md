@@ -42,6 +42,7 @@ This web server gonna be used for basic frontend interface:
 * FrontEND - settings, add/edit/delete tag
 * Added tag list creation is separate boot mode
 * Added export tag (JSON format) in separate boot mode
+* Added user authentication (for access) via login screen.
 
 # TODO:
 
@@ -61,7 +62,7 @@ default wireless password is "88888888"
 
 # Known issues:
 
-* When switch from wireless client to AP mode, do not initialize with proper SSID/PASSWORD
+* When switch from wireless client to AP mode, do not initialize with proper SSID/PASSWORD (until reboot twice)
 
 # Limitations:
 
