@@ -99,3 +99,9 @@ reset button on GPIO 0
 Grant access button on GPIO 1,2,9,10
 buzzer: GPIO 1,2,9
 Relay: 1,2,9
+
+
+
+
+# FINAL notes
+I switch that project for my private and commercial use. Code listed here is good for a start for someone who want to achieve good, cheap standalone RFID system.
