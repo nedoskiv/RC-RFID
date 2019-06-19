@@ -105,3 +105,6 @@ Relay: 1,2,9
 
 # FINAL notes
 I switch that project for my private and commercial use. Code listed here is good for a start for someone who want to achieve good, cheap standalone RFID system.
+
+
+![Image description](https://raw.githubusercontent.com/nedoskiv/RC-RFID/master/rc-rfid_bb.jpg)
